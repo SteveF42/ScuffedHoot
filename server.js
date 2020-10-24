@@ -12,7 +12,7 @@ const io = socketio(server);
 
 db.connect((err)=>{
     if(err){
-        console.log('error, unable to connect to MongoDB',err)
+        throw err
     }
     else{
         console.log('listening on port 3000')
@@ -27,7 +27,9 @@ app.engine('html', require('ejs').renderFile);
 //uses static folder
 app.use(express.static(path.join(__dirname,'public')))
 
-//use home
+//middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true })) 
 app.use('/',home)
 
 
