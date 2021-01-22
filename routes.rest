@@ -3,25 +3,48 @@ GET HTTP://localhost:3000/api/getQuestion-Queries
 ###
 
 
-GET HTTP://localhost:3000/api/getQuestion-Queries/600a4c73a4953f23c4065d29
+GET HTTP://localhost:3000/api/getQuestion-Queries/600a59b32c8fd823885cec0b
 
 
 ###
 
+DELETE HTTP://localhost:3000/api/deleteQuestion-Queries/600a599d2c8fd823885cec08
+
+###
+
+PATCH HTTP://localhost:3000/api/updateQuestion-Queries/600a59b32c8fd823885cec0b
+Content-Type: application/json
+
+{
+    "description" : "not your mom"
+}
+
+###
 POST HTTP://localhost:3000/api/sendQuestion-Queries
 Content-Type: application/json
 
 {
     "title" : "Celebrities",
     "description" : "your mom",
-    "questions" :[{
-        "question" : "Who wrote take on me?",
-        "answers" : {
-            "Q1": "me",
-            "Q2": "you",
-            "Q3": "Miley Cyrus",
-            "Q4": "Ah ha"
+    "questions" :
+    [   {
+            "question" : "Who wrote take on me?",
+            "answers" : {
+                "Q1": "me",
+                "Q2": "you",
+                "Q3": "Miley Cyrus",
+                "Q4": "Ah ha"
+                }
+        },
+        {
+            "question" : "What movie does Adam Sandler star in?",
+            "answers" : {
+                "Q1": "Grown Ups",
+                "Q2": "Grown Ups 2",
+                "Q3": "Happy Gilmore",
+                "Q4": "All of the above"
+                }
         }
-    }]
+    ]
 }
 
