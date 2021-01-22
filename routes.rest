@@ -1,0 +1,27 @@
+GET HTTP://localhost:3000/api/getQuestion-Queries
+
+###
+
+
+GET HTTP://localhost:3000/api/getQuestion-Queries/600a4c73a4953f23c4065d29
+
+
+###
+
+POST HTTP://localhost:3000/api/sendQuestion-Queries
+Content-Type: application/json
+
+{
+    "title" : "Celebrities",
+    "description" : "your mom",
+    "questions" :[{
+        "question" : "Who wrote take on me?",
+        "answers" : {
+            "Q1": "me",
+            "Q2": "you",
+            "Q3": "Miley Cyrus",
+            "Q4": "Ah ha"
+        }
+    }]
+}
+

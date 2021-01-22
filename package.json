@@ -1,22 +1,32 @@
 {
   "name": "scuffedhoot",
   "version": "1.0.0",
-  "description": "Literally a scuffed version of Kahoot with NodeJS",
+  "description": "A very scuffed version of kahoot",
   "main": "server.js",
   "scripts": {
-    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index"
   },
-  "author": "Steve Flores",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SteveF42/ScuffedHoot.git"
+  },
+  "author": "steve flores",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SteveF42/ScuffedHoot/issues"
+  },
+  "homepage": "https://github.com/SteveF42/ScuffedHoot#readme",
   "dependencies": {
-    "bootstrap": "^4.5.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "mongodb": "^3.6.2",
-    "socket.io": "^2.3.0"
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.13",
+    "socket.io": "^3.1.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.5"
+    "nodemon": "^2.0.7"
   }
 }
