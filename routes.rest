@@ -24,48 +24,46 @@ POST HTTP://localhost:3000/api/sendQuestion-Queries
 Content-Type: application/json
 
 {
-    "title" : "Celebrities",
-    "description" : "your mom",
+    "title" : "Disney",
+    "description" : "questions on different disney characters",
     "questions" :
     [   {
-            "question" : "Who wrote take on me?",
+            "question" : "When was cars 1 released?",
             "answers" : {
-                "Q1": "me",
-                "Q2": "you",
-                "Q3": "Miley Cyrus",
-                "Q4": "Ah ha"
-                }
+                "Q1": "1992",
+                "Q2": "2012",
+                "Q3": "2005",
+                "Q4": "2015"
+                },
+            "correct_answer" : "Q3"
         },
         {
-            "question" : "What movie does Adam Sandler star in?",
+            "question" : "Which princess has long hair?",
             "answers" : {
-                "Q1": "Grown Ups",
-                "Q2": "Grown Ups 2",
-                "Q3": "Happy Gilmore",
-                "Q4": "All of the above"
-                }
+                "Q1": "Repunzal",
+                "Q2": "Cindereala",
+                "Q3": "That dude from down the street",
+                "Q4": "that frog chick"
+                },
+            "correct_answer" : "Q4"
         }
     ]
 }
 
 ###
 
-POST http://localhost:3000/api/play/host
+POST http://localhost:3000/api/host
 Content-Type: application/json
-
-{
-    "host" : "Poop"
-}
 
 ###
 
-GET http://localhost:3000/api/play/S0DTL2FT
+GET http://localhost:3000/api/play/GIRT9D5T
 
 ###
 
-POST http://localhost:3000/api/play/S0DTL2FT
+POST http://localhost:3000/api/play/GIRT9D5T
 Content-Type: application/json
 
 {
-    "name" : "josh"
+    "name" : "retard"
 }

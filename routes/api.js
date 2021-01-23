@@ -19,7 +19,7 @@ router.get('/getQuestion-Queries', async (req, res) => {
     try {
         const curser = await Quiz.find();
         // const curser = await db.collection('Kahoot').find().toArray();
-        console.log(curser)
+        // console.log(curser)
         res.json(curser);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -37,6 +37,7 @@ router.post('/sendQuestion-Queries', async (req, res) => {
     const game = new Quiz({
         title: req.body.title,
         description: req.body.description,
+        question_count: req.body.questions.length,
         questions: req.body.questions
     })
     try {
@@ -111,29 +112,28 @@ router.get('/play/:code', async (req,res)=>{
     }
 })
 
-router.post('/play/:code', async(req,res)=>{
-    try{
-        let room = await Room.findOne({code : req.params.code});
-        console.log(room);
-        room.players.push(req.body.name);
-        room = await room.save();
-        res.status(205).json(room);
-    }catch(err){
-        res.status(400).json({"message" : err.message});
-    }
-})
-
-router.post('/play/host', async (req,res) =>{
+router.post('/host', async (req,res) =>{
     const Key = await generateRandomKey();
     const room = new Room({
         code : Key,
-        host : req.body.host
+        host : req.session.id
     })
     try{
-        room.save();
+        await room.save();
         res.status(201).json(room);
     }catch(err){
         res.status(500).json({message : err.message});
+    }
+})
+
+router.post('/play/:code', async(req,res)=>{
+    try{
+        const room = await Room.findOne({code : req.params.code});
+        room.players.push(req.body.name);
+        await room.save();
+        res.status(205).json(room);
+    }catch(err){
+        res.status(400).json({"message" : err.message});
     }
 })
 
