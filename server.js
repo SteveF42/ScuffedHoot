@@ -13,10 +13,9 @@ app.set('views',path.join(__dirname,'/public/views'))
 
 //midleware
 app.use(express.json());
-app.use(express.urlencoded());
-app.use('/home',require('./routes/home.js'))
+app.use('/',require('./routes/home.js'))
 app.use('/api',require('./routes/api.js'))
-
+app.use('/play',require('./routes/play.js'))
 
 db.connect((err)=>{
     if(err){
@@ -27,3 +26,9 @@ db.connect((err)=>{
         server.listen(3000);
     }
 })
+
+//socketi io stuff
+io.on('connection', client => {
+    
+})
+
