@@ -6,6 +6,7 @@ const db = require ('./Database/MongoDB.js')
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+const bodyParser = require('body-parser')
 const session = require('express-session');
 require('dotenv').config();
 
@@ -18,6 +19,9 @@ app.use(express.static('public'))
 app.set('views',path.join(__dirname,'/public/views'))
 
 //midleware
+app.use(bodyParser.urlencoded({
+    extended:true
+}))
 app.use(express.json());
 app.use(session({
     secret: process.env.SECRET_KEY,
@@ -41,8 +45,11 @@ db.connect((err)=>{
     }
 })
 
-//socketi io stuff
+//socketi io stuff handles users connecting to rooms
 io.on('connection', client => {
-    
+    console.log('user has connected to room')
+    client.on('host',(info)=>{
+
+    })
 })
 

@@ -1,32 +1,21 @@
 <html lang="en">
 <head>
-    <%-include('./partials/head.ejs') %> 
-    <link rel="stylesheet" href="/css/host.css">
+    <%-include('./partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/host.css"> 
 </head>
 <body>
     <%-include('./partials/nav.ejs') %> 
-    
-    <div class="container">
 
-        <div class="col">
-            <div class="search">
-                
-            </div>
-            <div class="tips">
-                <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col">
-            <ul class="game-info">
-                <!-- this area will be filled from host.js -->
-            </ul>
-        </div>
+    <div class="title">
+
     </div>
     
+    <div class="container">
+        <div class="all-players">
+
+        </div>
+    </div>
+
     <%-include('./partials/scripts.ejs') %> 
     <script src="/js/host.js"></script>
 </body>

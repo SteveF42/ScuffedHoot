@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const database = require('../Database/MongoDB.js');
-const Quiz = require('../Database/models/game')
+const Quiz = require('../Database/models/kahoots')
 const Room = require('../Database/models/rooms');
 const rooms = require('../Database/models/rooms');
 const rand = require('random-key')
@@ -37,6 +37,7 @@ router.post('/sendQuestion-Queries', async (req, res) => {
     const game = new Quiz({
         title: req.body.title,
         description: req.body.description,
+        category: req.body.category,
         question_count: req.body.questions.length,
         questions: req.body.questions
     })
@@ -94,7 +95,7 @@ async function getKahoot(req, res, next) {
 
 /*
 ======================================================================
-        Responsible for creating, adding players, and deleting different rooms
+        Responsible for creating rooms, adding players, and deleting different rooms
 ======================================================================
 */
 
@@ -126,6 +127,7 @@ router.post('/host', async (req,res) =>{
     }
 })
 
+//adds user to room information
 router.post('/play/:code', async(req,res)=>{
     try{
         const room = await Room.findOne({code : req.params.code});
