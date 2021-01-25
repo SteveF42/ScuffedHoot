@@ -1,22 +1,44 @@
 <html lang="en">
+
 <head>
     <%-include('./partials/head.ejs') %>
-    <link rel="stylesheet" href="/css/host.css"> 
+    <link rel="stylesheet" href="/css/host.css">
 </head>
+
 <body>
-    <%-include('./partials/nav.ejs') %> 
+    <%-include('./partials/nav.ejs') %>
 
-    <div class="title">
+        <div class="display-game-info">
+            <div class="game-code">
+                <h1>Game Code: <strong><%=room_data.code%></strong></h1>
+            </div>
+            <div class="game-topic">
+                <h1><%=game_data.title%></h1>
 
-    </div>
-    
-    <div class="container">
-        <div class="all-players">
-
+            </div>
         </div>
-    </div>
 
-    <%-include('./partials/scripts.ejs') %> 
-    <script src="/js/host.js"></script>
+        <div class="container">
+
+            <div class="show-players">
+                <h3>player1</h3>
+                <h3>player1</h3>
+                <h3>player1</h3>
+                <h3>player1</h3>
+                <h3>player1</h3>
+            </div>
+        </div>
+
+        <script>
+            const room_json = '<%- JSON.stringify(room_data)%>';
+            const room_info = JSON.parse(room_json);
+
+            const game_json = '<%- JSON.stringify(game_data)%>';
+            const game_info = JSON.parse(game_json);
+        </script>
+        <%-include('./partials/scripts.ejs') %>
+        <script src="/js/host.js"></script>
+
 </body>
+
 </html>

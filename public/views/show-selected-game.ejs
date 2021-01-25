@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <%-include('./partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/show-selected-game.css">
+</head>
+
+<body>
+    <%-include('./partials/nav.ejs') %>
+
+        <div class="container">
+            <div class="col1">
+                <h1 class="title">
+                    <%=scuffedHoot.title %> 
+                </h1>
+                <button id="PLAY">PLAY</button>
+                <p class="description">
+                    <%=scuffedHoot.description %>
+                </p>
+            </div>
+            <div class="col2">
+                <!-- JS will add lines lines for the questions -->
+                <%let ctr = 1;%>
+                <% scuffedHoot.questions.forEach((item)=>{ %>
+                        <div class="questions">
+                            <h4><%=ctr %> - QUIZ </h4>                            
+                            <p> <strong><%=item.question%></strong></p>
+                            <ol>
+                                <% item.answers.forEach((answer)=>{ %>
+                                    <li class="question-options">
+                                        <%=answer%> 
+                                    </li>
+                                <% }) %>  
+                            </ol>
+                        </div> 
+                        <% ctr += 1 %> 
+                <% }) %> 
+            </div>
+        </div>
+
+
+        <script>
+            const json_str = '<%- JSON.stringify(scuffedHoot)%>';
+            const scuffedhoot = JSON.parse(json_str)
+            console.log(scuffedhoot);
+            console.log(scuffedhoot.questions[0].answers);
+        </script>
+        <%-include('./partials/scripts.ejs') %>
+        <script src="/js/show-selected-game.js"></script>
+
+</body>
+
+</html>

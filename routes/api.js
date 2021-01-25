@@ -113,7 +113,7 @@ router.get('/play/:code', async (req,res)=>{
     }
 })
 
-router.post('/host', async (req,res) =>{
+router.post('/create-room', async (req,res) =>{
     const Key = await generateRandomKey();
     const room = new Room({
         code : Key,

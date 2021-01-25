@@ -31,9 +31,13 @@ app.use(session({
     activeDuration: 5*60*1000
 
 }));
+
 app.use('/',require('./routes/home.js'));
 app.use('/api',require('./routes/api.js'));
 app.use('/play',require('./routes/play.js'));
+app.use((req,res)=>{
+    res.render('404.ejs',{title:'404'});
+});
 
 db.connect((err)=>{
     if(err){
@@ -46,10 +50,16 @@ db.connect((err)=>{
 })
 
 //socketi io stuff handles users connecting to rooms
-io.on('connection', client => {
-    console.log('user has connected to room')
-    client.on('host',(info)=>{
+io.on('connection', socket => {
+    console.log('user has connected')
+    socket.on('host-room',(code)=>{
+        console.log('User is hosting room:',code)
+        socket.join(code);
+    })
+
+    socket.on('join-room',code=>{
 
     })
 })
+
 

@@ -3,6 +3,7 @@ require('dotenv').config();
 const Game = require('../Database/models/kahoots.js');
 const Room = require('../Database/models/rooms.js');
 const fetch = require('node-fetch');
+const kahoots = require('../Database/models/kahoots.js');
 
 router.get('/home',(req,res)=>{
     res.render('index.ejs',{title:'home'})
@@ -14,6 +15,19 @@ router.get('/select-game', async(req,res)=>{
     const results = await get_search_query();
     res.render('select-game.ejs',{title:'host game',search_quaries:results});
 })
+
+router.get(router.get('/select-game/game', async(req,res)=>{
+    try{
+        const search_quaries = JSON.parse(req.query.data);
+        const result = await kahoots.findById(search_quaries.gameID);
+        if(search_quaries == null || result == null){
+            res.redirect('/home');
+        }
+        res.render('show-selected-game.ejs',{title:search_quaries.title,scuffedHoot:result});
+    }catch(err){
+        res.redirect('/home');
+    }
+}))
 
 router.post('/select-game', async(req,res)=>{
     //do something to take the search queries
@@ -41,11 +55,21 @@ router.post('/select-game', async(req,res)=>{
 router.get('/host', async(req,res)=>{
     // const room_valid = await fetch(process.env.URL_LINK + '/api/')
     try{
-        const room_data=JSON.parse(req.query.data)
-        console.log(room_data)
+        // const game_data = JSON.parse(req.query.game)
+        const room_code = req.query.code;
+        const gameID = req.query.gameID;
+        console.log(room_code,gameID)
+
+        const room_data = await Room.findOne({code:room_code});
+        const game_data = await Game.findById(gameID);
+
+        if(room_data == null || game_data == null){
+            res.render('404.ejs',{title:'Not Found'});
+        }
         
-        res.render('host',{title:'home','room_data':room_data});
+        res.render('host.ejs',{title:'home','room_data':room_data,'game_data':game_data});
     }catch(err){
+        console.log(err)
         res.redirect('/home');
     }
         

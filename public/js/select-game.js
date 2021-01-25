@@ -4,19 +4,13 @@ const api_link = "http://localhost:3000"
 document.onload = send_info_to_dom()
 
 //when the user selects a game
-$('.choose-game').on('click',async()=>{
-    console.log(api_link);
+$('.choose-game').on('click',async(event)=>{
     try{
-        const request = await fetch(api_link + '/api/host',{
-            method: 'POST',
-            headers:{
-                'content-type': 'application/json',
-            }
-        });
-        const room_info_json = await request.json();
-        console.log(room_info_json);
-        
-        self.location.replace(api_link+'/host?data='+encodeURIComponent(JSON.stringify(room_info_json)))
+        const button = event.target;
+        const title = button.innerHTML;
+        const gameID = { gameID : button.name, title : title};
+        console.log(gameID)
+        self.location.href=(api_link+'/select-game/game?data='+encodeURIComponent(JSON.stringify(gameID)))
     }catch(err){
         console.log(err)
     }
@@ -46,7 +40,7 @@ function send_info_to_dom(){
         `<div class="game-info-container">
             <div class="game-title">
                 <h4>
-                    <button class="choose-game" href="#">${title}</button> 
+                    <button class="choose-game" name ="${game_id}">${title}</button> 
                 </h4>
             </div>
             <p class="game-info">
