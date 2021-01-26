@@ -24,35 +24,36 @@ POST HTTP://localhost:3000/api/sendQuestion-Queries
 Content-Type: application/json
 
 {
-    "title" : "Disney",
-    "description" : "questions on different disney characters",
+    "title" : "Things Bryan says",
+    "description" : "What would bryan say?",
+    "category" : "bryan",
     "questions" :
     [   {
-            "question" : "When was cars 1 released?",
+            "question" : "what is bryans favorite word?",
             "answers" : {
-                "Q1": "1992",
-                "Q2": "2012",
-                "Q3": "2005",
-                "Q4": "2015"
-                },
-            "correct_answer" : "Q3"
-        },
-        {
-            "question" : "Which princess has long hair?",
-            "answers" : {
-                "Q1": "Repunzal",
-                "Q2": "Cindereala",
-                "Q3": "That dude from down the street",
-                "Q4": "that frog chick"
+                "Q1": "penis",
+                "Q2": "poop",
+                "Q3": "pee pee",
+                "Q4": "your mom"
                 },
             "correct_answer" : "Q4"
+        },
+        {
+            "question" : "How many times has bryan said he'd stop talking to julie?",
+            "answers" : {
+                "Q1": "too many fucking times",
+                "Q2": "I'm horny",
+                "Q3": "I haven't had sex in over 2 months man.",
+                "Q4": "Who's julie?"
+                },
+            "correct_answer" : "Q2"
         }
     ]
 }
 
 ###
 
-POST http://localhost:3000/api/host
+POST http://localhost:3000/api/create-room
 Content-Type: application/json
 
 ###

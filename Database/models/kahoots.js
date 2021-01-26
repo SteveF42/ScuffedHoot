@@ -9,12 +9,18 @@ const kahootSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    question_count : Number,
+    question_count: {
+        type: Number, 
+        required: true
+    },
+    category: { 
+        type: String, 
+        required: true 
+    },
     questions: [{
-        question: {type:String, required:true},
-        answers: {type:Map,of:String, required : true},
-        correct_answer: {type: String, required: true},
-        category: {type: String, required: true}
+        question: { type: String, required: true },
+        answers: { type: Map, of: String, required: true },
+        correct_answer: { type: String, required: true },
     }]
 
 })

@@ -27,9 +27,7 @@ app.use(session({
     secret: process.env.SECRET_KEY,
     resave: true,
     saveUninitialized: true,
-    duration: 30*60*1000,
-    activeDuration: 5*60*1000
-
+    duration: 120*60*1000,
 }));
 
 app.use('/',require('./routes/home.js'));

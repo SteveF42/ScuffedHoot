@@ -39,9 +39,9 @@ function send_info_to_dom(){
         $('.col2').append(
         `<div class="game-info-container">
             <div class="game-title">
-                <h4>
+                <h5>
                     <button class="choose-game" name ="${game_id}">${title}</button> 
-                </h4>
+                </h5>
             </div>
             <p class="game-info">
                 ${description}<br>

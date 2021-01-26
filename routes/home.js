@@ -22,6 +22,7 @@ router.get(router.get('/select-game/game', async(req,res)=>{
         const result = await kahoots.findById(search_quaries.gameID);
         if(search_quaries == null || result == null){
             res.redirect('/home');
+            return;
         }
         res.render('show-selected-game.ejs',{title:search_quaries.title,scuffedHoot:result});
     }catch(err){
@@ -54,11 +55,15 @@ router.post('/select-game', async(req,res)=>{
 
 router.get('/host', async(req,res)=>{
     // const room_valid = await fetch(process.env.URL_LINK + '/api/')
+    
     try{
         // const game_data = JSON.parse(req.query.game)
         const room_code = req.query.code;
         const gameID = req.query.gameID;
-        console.log(room_code,gameID)
+        if(req.session.room_key != room_code){
+            res.redirect('/home');
+            return;
+        }
 
         const room_data = await Room.findOne({code:room_code});
         const game_data = await Game.findById(gameID);
@@ -67,7 +72,7 @@ router.get('/host', async(req,res)=>{
             res.render('404.ejs',{title:'Not Found'});
         }
         
-        res.render('host.ejs',{title:'home','room_data':room_data,'game_data':game_data});
+        res.render('host.ejs',{title:'host','room_data':room_data,'game_data':game_data});
     }catch(err){
         console.log(err)
         res.redirect('/home');

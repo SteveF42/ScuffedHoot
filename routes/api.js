@@ -4,6 +4,7 @@ const Quiz = require('../Database/models/kahoots')
 const Room = require('../Database/models/rooms');
 const rooms = require('../Database/models/rooms');
 const rand = require('random-key')
+const express= require('express')
 
 
 
@@ -33,12 +34,13 @@ router.get('/getQuestion-Queries/:id', getKahoot, async (req, res) => {
 
 //inserts a quiz
 router.post('/sendQuestion-Queries', async (req, res) => {
+    console.log(req.body)
 
     const game = new Quiz({
         title: req.body.title,
         description: req.body.description,
-        category: req.body.category,
         question_count: req.body.questions.length,
+        category: req.body.category,
         questions: req.body.questions
     })
     try {
@@ -114,7 +116,15 @@ router.get('/play/:code', async (req,res)=>{
 })
 
 router.post('/create-room', async (req,res) =>{
+    const session_has_room = await Room.find({'host':req.session.id});
     const Key = await generateRandomKey();
+    req.session.room_key = Key;
+    
+    if(session_has_room.length > 0){
+        const l = await Room.deleteOne({host:req.session.id});
+        console.log(l);
+    }
+
     const room = new Room({
         code : Key,
         host : req.session.id

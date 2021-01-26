@@ -42,6 +42,7 @@ body{
 .game-title{
     width: 25%;
     margin:0;
+    padding: 0 15px;
     border:solid;
     align-items: center;
     justify-content: center;
@@ -60,7 +61,7 @@ body{
     transition-duration: 0.4s;
     background-color: none;
     border:2px solid green;
-    padding: 15px;
+    padding: 5px 10px;
     border-radius: 8px;
 }
 
@@ -101,6 +102,7 @@ button:focus{
     .game-title{
         width: 100%;
         border-bottom: none;
+        padding-top: 15px;
     }
     .game-info{
         border-top:none;
