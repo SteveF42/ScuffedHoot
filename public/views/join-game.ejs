@@ -1,0 +1,45 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%-include('./partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/join-game.css">
+</head>
+
+<body>
+    <%-include('./partials/nav.ejs') %>
+        <div class="main">
+            <div class="game-controller">
+                <div>
+
+                </div>
+                <div>
+                    
+                </div>
+            </div>
+
+            <section class="container">
+                <div class="vertical-container">
+                    <div>
+                        <div class="error">
+
+                        </div>
+                        <div class="title">
+                            <h1>ScuffedHoot!</h1>
+                        </div>
+                        <div class="input-field">
+                            <input id="Name" class="input-box" type="text" placeholder="Name">
+                            <input id="Game-Pin" class="input-box" type="input-box" placeholder="Game PIN">
+                            <button type="button" class="submit-button">Enter</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <%-include('./partials/scripts.ejs') %>
+            <script src="/js/join-game.js"></script>
+</body>
+
+</html>

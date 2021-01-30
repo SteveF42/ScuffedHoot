@@ -1,6 +1,7 @@
 <html lang="en">
 
 <head>
+    <title>ScuffedHoot | <%=scuffedHoot.title %>  </title>
     <%-include('./partials/head.ejs') %>
     <link rel="stylesheet" href="/css/show-selected-game.css">
 </head>
@@ -19,16 +20,20 @@
                 </p>
             </div>
             <div class="col2">
-                <!-- JS will add lines lines for the questions -->
+                <button>show answers</button>
                 <%let ctr = 1;%>
                 <% scuffedHoot.questions.forEach((item)=>{ %>
-                        <div class="questions">
+                        <div class="question-info">
                             <h4><%=ctr %> - QUIZ </h4>                            
                             <p> <strong><%=item.question%></strong></p>
-                            <ol>
-                                <% item.answers.forEach((answer)=>{ %>
+                            <ol class="question-choices">
+                                <% item.answers.forEach((answer,key)=>{ %>
                                     <li class="question-options">
-                                        <%=answer%> 
+                                        <% if(key === item.correct_answer) {%>
+                                            <%=answer%> - <strong>correct</strong> 
+                                        <% }else{ %>
+                                            <%=answer%> 
+                                        <% } %>  
                                     </li>
                                 <% }) %>  
                             </ol>

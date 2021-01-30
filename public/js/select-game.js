@@ -7,10 +7,9 @@ document.onload = send_info_to_dom()
 $('.choose-game').on('click',async(event)=>{
     try{
         const button = event.target;
-        const title = button.innerHTML;
-        const gameID = { gameID : button.name, title : title};
+        const gameID = button.name
         console.log(gameID)
-        self.location.href=(api_link+'/select-game/game?data='+encodeURIComponent(JSON.stringify(gameID)))
+        self.location.href=(api_link+'/select-game/game?gameID='+gameID)
     }catch(err){
         console.log(err)
     }

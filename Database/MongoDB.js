@@ -15,7 +15,7 @@ const state = {
 }
 
 
-function connect(callback){
+async function connect(callback){
     if(state.db){
         callback()
     }else{
