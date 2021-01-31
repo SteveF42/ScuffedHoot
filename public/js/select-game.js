@@ -17,7 +17,6 @@ $('.choose-game').on('click',async(event)=>{
 
 
 function send_info_to_dom(){
-    console.log(search_quaries)
     if(typeof(search_quaries) !== 'object'){
         return;
     }else if(search_quaries.notFound){
@@ -33,7 +32,6 @@ function send_info_to_dom(){
         const question_count = obj['question_count'];
         const game_id = obj['_id'];
 
-        console.log(description, question_count);
 
         $('.col2').append(
         `<div class="game-info-container">

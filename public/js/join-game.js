@@ -21,7 +21,7 @@ $('.submit-button').on(' click',async () => {
         $('.container').css({'display':'none'});
     } else {
         $('.error').replaceWith(`
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show alert" role="alert">
                 <strong>Invalid!</strong>
             </div>
         `)

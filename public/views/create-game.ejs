@@ -16,20 +16,22 @@
         </div>
     </header>
     <div class="container">
-        <div class="error">
+        <div id="error">
             <!-- Errors will be placed here -->
         </div>
 
         <form class="create-kahoot">
-            <div class="mb-3">
-                <label for="title-input">Title</label>
-                <input id="title-input" type="text" class="form-control" placeholder="Title">
+            <div>
+                <div class="mb-3">
+                    <label for="title-input">Title</label>
+                    <input id="title-input" type="text" class="form-control" placeholder="Title">
+                </div>
+                <div class="mb-3">
+                    <label for="description-input">Description</label>
+                    <input id="description-input" type="text" class="form-control" placeholder="Description">
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="description-input">Description</label>
-                <input id="description-input" type="text" class="form-control" placeholder="Description">
-            </div>
-
+                
             <div class="questions mb-3">
                 <div id='0'></div>
                 <div class="question mb-3" id='1'>
@@ -45,7 +47,7 @@
                         <div class="input-group mb-3" id="radio-control">
                             <input type="text" class="form-control" placeholder="Answer 1" id="question-1">
                             <div class="input-group-text">
-                                <input class="form-check-input" type="radio" value="" name="correct-choice"
+                                <input class="form-check-input" type="radio" value="Q1" name="correct-choice1"
                                     aria-label="Radio button for following text input">
                             </div>
                         </div>
@@ -53,7 +55,7 @@
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Answer 2" id="question-2">
                             <div class="input-group-text">
-                                <input class="form-check-input" type="radio" value="" name="correct-choice"
+                                <input class="form-check-input" type="radio" value="Q2" name="correct-choice1"
                                     aria-label="Radio button for following text input">
                             </div>
                         </div>
@@ -62,7 +64,7 @@
                             <input type="text" class="form-control" placeholder="Answer 3" id="question-3">
             
                             <div class="input-group-text">
-                                <input class="form-check-input" type="radio" value="" name="correct-choice"
+                                <input class="form-check-input" type="radio" value="Q3" name="correct-choice1"
                                     aria-label="Radio button for following text input">
                             </div>
                         </div>
@@ -70,7 +72,7 @@
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="Answer 4" id="question-4">
                             <div class="input-group-text">
-                                <input class="form-check-input" type="radio" value="" name="correct-choice"
+                                <input class="form-check-input" type="radio" value="Q4" name="correct-choice1"
                                     aria-label="Radio button for following text input">
                             </div>
                         </div>
