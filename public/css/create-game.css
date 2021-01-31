@@ -1,0 +1,23 @@
+
+.title{
+    margin: 25px 0;
+    text-align: center;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+}
+.title div h2{
+    padding: 0 40px;
+    border-bottom: solid;
+}
+
+.container{
+    background-color: rgb(230, 230, 230);
+    border-radius: 15px;
+    padding: 50px;
+    
+}
+
+.answers{
+    padding:0 5%;
+}

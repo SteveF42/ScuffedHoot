@@ -89,8 +89,8 @@ router.get('/join-game', (req,res)=>{
 
 
 
-router.get('/create', (req,res)=>{
-
+router.get('/create-game', (req,res)=>{
+    res.render('create-game.ejs',{title:"create"})
 })
 
 
