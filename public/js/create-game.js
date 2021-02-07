@@ -35,6 +35,7 @@ $('#submit-form').on('click',async ()=>{
         all_questions.push(questionObj);
     })
 
+    //formats it correctly
     const api_body = {
         title : title,
         description : description,

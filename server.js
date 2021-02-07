@@ -64,15 +64,36 @@ io.on('connection', socket => {
 
     socket.on('host-room', async (room_info) => {
         const code = room_info.code;
+        const roomId = room_info._id
+
+        const room = await Rooms.findById(roomId);
+        room.host_socket = socket.id;
+        await room.save();
+
         console.log('User is hosting room:', code)
         socket.join(code);
 
         // console.log(room_info)
     })
 
+    socket.on('leave-room',(roomCode) => {
+        const rooms = socket.rooms
+        socket.leave(roomCode)
+    })
+
+    //removes player from room
+    socket.on('remove-player', async(socketID,roomID) => {
+        const room = await Rooms.findById(roomID);
+
+        room.players = room.players.filter(obj=>obj.socket_id != socketID);
+        socket.broadcast.to(socketID).emit('kicked',null,room.code)
+
+        const res = await room.save()
+    })
+    
     socket.on('join-game', async (info) => {
         socket.join(info.code)
-        io.to(info.code).emit('user-join', info.name);
+        io.to(info.code).emit('user-join', info.name,socket.id);
 
         const room = await Rooms.findOne({ code: info.code });
 
@@ -81,12 +102,21 @@ io.on('connection', socket => {
     })
 
     socket.on('disconnect', async () => {
-        const query = await Rooms.find({ 'players.socket_id' : socket.id })
+        const query = await Rooms.find({$or:[{ 'players.socket_id' : socket.id }, {'host_socket' : socket.id}]})
         const room = query[0]
-
+        
         if (query == null || query.length === 0) return
-
+        
         const code = room.code
+        if (socket.id === room.host_socket) {
+            room.players = []
+            socket.broadcast.to(code).emit('kicked',hostDisconnect=true,code)
+            room.save()
+
+            return;
+        }
+
+
         let player_name;
 
         // finds the players name and removes them from the array
@@ -104,6 +134,23 @@ io.on('connection', socket => {
         await room.save()
         io.to(code).emit('player-disconnected', player_name)
 
+    })
+
+    socket.on('start-game',(code,questionCount) => {
+        console.log(code,questionCount)
+        socket.to(code).emit('start-game',questionCount)
+    })
+
+    socket.on('game-session',(code) => {
+        socket.to(code).emit('game-info')
+    })
+
+    socket.on('send-answer', async(code,answer) => {
+        const room = await Rooms.findOne({'socket_id':socket.id})
+        const player = room.players.filter(obj=> obj.socket_id === socket.id)
+        
+        //sends the chosen answer from the player to the host 
+        socket.to(room.host_socket).emit('receive-answer',answer,player.name)
     })
 })
 

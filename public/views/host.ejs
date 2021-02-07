@@ -9,7 +9,86 @@
     <iframe src="/audio/silence.mp3" type="audio/mp3" allow="autoplay" id="audio" style="display: none;"></iframe>
 
     <%-include('./partials/nav.ejs') %>
+    <div class="game-controller">
 
+        <div class="counter-display text-style">
+            <!-- show countdown until questions appear -->
+        </div>
+
+        <div class="results">
+            <div class="results-display">
+                <h2>Results</h2>
+                <div class="scoreboard">
+                    <div class="${player} scoreboard-player">
+                        <p class="S1 text-style">Steve</p>
+                        <p class="S2 text-style">100</p>
+                    </div>
+                    <div class="${player} scoreboard-player">
+                        <p class="S1 text-style">Steve</p>
+                        <p class="S2 text-style">100</p>
+                    </div>
+                    <div class="${player} scoreboard-player">
+                        <p class="S1 text-style">Steve</p>
+                        <p class="S2 text-style">100</p>
+                    </div>
+                    <div class="${player} scoreboard-player">
+                        <p class="S1 text-style">Steve</p>
+                        <p class="S2 text-style">100</p>
+                    </div>
+                    <div class="${player} scoreboard-player">
+                        <p class="S1 text-style">Steve</p>
+                        <p class="S2 text-style">100</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game-body">
+
+            <div class="question-display">
+
+                <div class="top-half text-style">
+                    <!-- quetsions go here -->
+                    <div class="timer-wrapper">
+                        <div class="timer" value="0">
+                            
+                        </div>
+                    </div>
+                    <div class="ask-question show-graph">
+
+                    </div>
+                    <div class="right-side">
+                        <div class="skip-div">
+                            <button class="skip-question cstm-btn">NEXT</button>
+                        </div>
+                        <div class="responses">
+                            <p class="submitted" value = "0">0</p>
+                            <p>Responses</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-half">
+                    <!-- answers go here -->
+                    <div class="question-choices text-style">
+
+                    </div>
+                </div>
+            </div>
+                
+        </div>
+
+        <footer class="game-footer">
+            <div class="question-count" value="1">
+
+            </div>
+            <div class="room-code">
+
+            </div>
+        </footer>
+
+
+    </div>
+    
+    <div class="lobby">
         <div class="top-info">
             <div class="display-game-info">
                 <div class="game-code">
@@ -24,23 +103,23 @@
                 <button>Audio button</button>
             </div>
         </div>
-
+        
         <div class="lobby-container">
             <section class="stats">
                 <div class="players-in-lobby qrst">
                     <div>
-                        <h3><strong class="player-counter">Players: 0</strong></h3>
+                        <h3><strong id="player-counter" value="0">Players: 0</strong></h3>
                     </div>
                 </div>
                 <div class="qrst">
                     <div class="title">
                         <h1><strong>ScuffedHoot!</strong></h1>
-
+                        
                     </div>
                 </div>
                 <div class="start-button qrst">
                     <div>
-                        <button><strong>START</strong></button>
+                        <button id="start"><strong>START</strong></button>
                     </div>
                 </div>
             </section>
@@ -49,14 +128,17 @@
                 </ul>
             </section>
         </div>
-
+    </div>
+        
         <%-include('./partials/scripts.ejs') %>
         <script>
+            //stupid dumb
+            const GAME_DATA = JSON.parse(('<%-JSON.stringify(game_data)%>'))
             const TITLE = '<%=game_data.title%>'
             console.log(TITLE);
-        </script>
+            </script>
         <script src="/js/host.js"></script>
-
-</body>
+        
+    </body>
 
 </html>

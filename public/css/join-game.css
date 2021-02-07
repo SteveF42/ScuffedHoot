@@ -75,10 +75,100 @@ body{
 }
 
 
+.game-controller{
+    display: none;
+    height: 100%;
+    flex-direction: column;
+}
 
+.game-nav{
+    background-color: rgb(23, 25, 26);
+    color: rgb(220, 219, 216);
+    width: 100%;
+    padding: 1.15rem;
+    z-index: 999;
+    border-top-color: rgba(133, 123, 109, 0.15);
+    font-weight: 700;
+    font-size: large;
+}
 
+.game-nav p{
+    margin: 0
+}
 
+.game-footer{
+    display: flex;
+    bottom:0px;
+    position: fixed;
+    background-color: rgb(23, 25, 26);
+    color: rgb(220, 219, 216);
+    width: 100%;
+    padding: 1.25rem;
+    z-index: 999;
+    border-top-color: rgba(133, 123, 109, 0.15);
+    font-weight: 700;
+    font-size: large;
+}
 
+.footer-container{
+    display: flex;
+    width: 100%;
+}
+
+.score{
+    display: flex;
+    width: 50%;
+    justify-content: flex-end;
+}
+.score p{
+    margin:0
+}
+.score-box{
+    background-color: rgba(71, 71, 71, 0.513);
+    padding: 10px;
+    border-radius: 15px;
+}
+.name{
+    display: flex;
+    width: 50%;
+    justify-content: flex-start;
+    margin: 0.75rem 0;
+}
+
+.game-body{
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    flex: 1 0 auto;
+    background: rgb(102, 191, 57);
+}
+
+.text-style{
+    color: rgb(220, 219, 216);
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    line-height: normal;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+.display-message{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.upper-message{
+    padding-bottom: 25px;
+}
+
+.lower-message{
+    font-size: 1.5rem;
+}
 
 @keyframes color-change{
     25% {

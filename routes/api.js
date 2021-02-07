@@ -34,7 +34,6 @@ router.get('/getQuestion-Queries/:id', getKahoot, async (req, res) => {
 
 //inserts a quiz
 router.post('/sendQuestion-Queries', async (req, res) => {
-    console.log(req.body)
 
     const game = new Quiz({
         title: req.body.title,
@@ -111,7 +110,7 @@ router.get('/play/:code', async (req, res) => {
         if (room == null) {
             res.status(404).json({ 'message': 'Room Not Found' });
         } else {
-            res.status(200).json({ 'message': 'success' });
+            res.status(200).json(room);
         }
     } catch (err) {
         res.status(500).json({ message: err.message });

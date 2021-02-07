@@ -8,6 +8,7 @@ const database = require('../MongoDB.js')
 const RoomSchema = new mongoose.Schema({
     code: { type: String, maxlength: 8, unique : true, required : true, default : ""},
     host: {type: String, required : true, unique: true, default : ""},
+    host_socket: {type: String, required : true, unique: true, default : "No Socket"},
     players: [{
         name : String,
         socket_id : String,

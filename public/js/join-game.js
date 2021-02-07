@@ -13,17 +13,66 @@ $('.submit-button').on(' click',async () => {
     const gamePIN = $('#Game-Pin').val() || 'gameID';
 
     const response = await fetch(api_link + `/api/play/${gamePIN}`);
-    const verify = await response.json();
-    console.log(verify,gamePIN)
+    const roomInfo = await response.json();
+    console.log(roomInfo)
 
-    if (verify.message == "success") {
+    if (response.status === 200) {
+        for(let i = 0; i < roomInfo.players.length; i++){
+            const otherName = roomInfo.players[i].name;
+            if(otherName === name){
+                displayError('Name already taken!');
+                return;
+            }
+        }
         socket.emit('join-game', { name: name, code: gamePIN });
         $('.container').css({'display':'none'});
+        // insert something that says waiting for host
+
+        $('.name-container').append(name)
+        $('.game-controller').css({'display': 'flex'})
+
+
     } else {
-        $('.error').replaceWith(`
-            <div class="alert alert-danger alert-dismissible fade show alert" role="alert">
-                <strong>Invalid!</strong>
-            </div>
-        `)
+        displayError('Invalid Code')
     }
+})
+
+
+socket.on('kicked', (hostDisconnect,roomCode) => {
+    $('.name').html('');
+    $('.game-controller').css({'display': 'none'});
+    $('.container').css({'display' :'flex'})
+
+    if(hostDisconnect){
+        displayError('Host has disconnected!')
+    }else{
+        displayError('You have been kicked!')
+    }
+
+    socket.emit('leave-room',roomCode);
+})
+
+function displayError(msg){
+    $('.error').html(`
+    <div class="alert alert-danger alert-dismissible fade show alert" role="alert">
+        ${msg}
+    </div>
+`)
+}
+
+
+
+socket.on('start-game',(questionCount) => {
+    $('.game-nav').html(`
+        <p value="0">Question: 0/${questionCount}</p>
+    `)
+    $('.score').html(`
+        <div class="score-box">
+            <p value="0">Score: 0</p>
+        </div>
+    `)
+
+    $('.game-body').html(`
+        <p class="text-style">Get Ready!</p>
+    `)
 })
