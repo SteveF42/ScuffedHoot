@@ -61,7 +61,8 @@ app.use((req, res) => {
 
 //socketi io stuff handles users connecting to rooms
 io.on('connection', socket => {
-
+    
+    //creates a room that the host connects to
     socket.on('host-room', async (room_info) => {
         const code = room_info.code;
         const roomId = room_info._id
@@ -75,7 +76,7 @@ io.on('connection', socket => {
 
         // console.log(room_info)
     })
-
+    //disconnects user from room
     socket.on('leave-room',(roomCode) => {
         const rooms = socket.rooms
         socket.leave(roomCode)
@@ -90,7 +91,7 @@ io.on('connection', socket => {
 
         const res = await room.save()
     })
-    
+    //when a user connects to a host
     socket.on('join-game', async (info) => {
         socket.join(info.code)
         io.to(info.code).emit('user-join', info.name,socket.id);
@@ -100,7 +101,7 @@ io.on('connection', socket => {
         room.players.push({ name: info.name, socket_id: socket.id });
         await room.save();
     })
-
+    //when a user disconnects randomly checks if its the host or a player
     socket.on('disconnect', async () => {
         const query = await Rooms.find({$or:[{ 'players.socket_id' : socket.id }, {'host_socket' : socket.id}]})
         const room = query[0]
@@ -135,22 +136,33 @@ io.on('connection', socket => {
         io.to(code).emit('player-disconnected', player_name)
 
     })
-
+    //sends game info to each individual player such as question count, and question choices
     socket.on('start-game',(code,questionCount) => {
         console.log(code,questionCount)
         socket.to(code).emit('start-game',questionCount)
     })
-
+    //wtf does this do lmao
     socket.on('game-session',(code) => {
         socket.to(code).emit('game-info')
     })
-
+    //sends event to host when a player submittes an answer
     socket.on('send-answer', async(code,answer) => {
         const room = await Rooms.findOne({'socket_id':socket.id})
         const player = room.players.filter(obj=> obj.socket_id === socket.id)
         
         //sends the chosen answer from the player to the host 
         socket.to(room.host_socket).emit('receive-answer',answer,player.name)
+    })
+
+    //at the end of every question it'll send an event to the players telling them what their score was
+    socket.on('send-player-scores',(room,players) => {
+        players.forEach((obj) => {
+            socket.to(obj.socketID).emit('display-answer-screen',obj.score)
+        })
+    })
+    //allows players to select answers
+    socket.on('allow-answers',(code,question)=>{
+        socket.broadcast.to(code).emit('display-questions',question)
     })
 })
 

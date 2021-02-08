@@ -133,7 +133,7 @@
         <%-include('./partials/scripts.ejs') %>
         <script>
             //stupid dumb
-            const GAME_DATA = JSON.parse(('<%-JSON.stringify(game_data)%>'))
+            const GAME_DATA = JSON.parse((`<%-JSON.stringify(game_data)%>`))
             const TITLE = '<%=game_data.title%>'
             console.log(TITLE);
             </script>

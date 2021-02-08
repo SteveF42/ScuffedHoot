@@ -37,6 +37,13 @@ $('.submit-button').on(' click',async () => {
     }
 })
 
+function displayError(msg){
+    $('.error').html(`
+    <div class="alert alert-danger alert-dismissible fade show alert" role="alert">
+        ${msg}
+    </div>
+`)
+}
 
 socket.on('kicked', (hostDisconnect,roomCode) => {
     $('.name').html('');
@@ -49,17 +56,13 @@ socket.on('kicked', (hostDisconnect,roomCode) => {
         displayError('You have been kicked!')
     }
 
+    $('.game-body').html(`
+        <h2 class="text-style upper-message">You're in!</h2>
+        <p class="text-style lower-message">See your nickname on screen?</p>
+    `)
+
     socket.emit('leave-room',roomCode);
 })
-
-function displayError(msg){
-    $('.error').html(`
-    <div class="alert alert-danger alert-dismissible fade show alert" role="alert">
-        ${msg}
-    </div>
-`)
-}
-
 
 
 socket.on('start-game',(questionCount) => {
@@ -75,4 +78,13 @@ socket.on('start-game',(questionCount) => {
     $('.game-body').html(`
         <p class="text-style">Get Ready!</p>
     `)
+})
+
+socket.on('display-answer-screen',myScore=>{
+    //display the users score and if the answer was correct or not
+})
+
+let isCorrect = false;
+socket.on('display-questions',questionInfo=>{
+    //display the questions choices and if the correct one was made
 })

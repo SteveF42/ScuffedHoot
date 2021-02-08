@@ -1,7 +1,6 @@
 const socket = io('http://localhost:3000')
 const api_link = "http://localhost:3000"
-const playerScores = []
-let players;
+const players = []
 let roomID;
 let roomCode;
 let currentQuestion = 0;
@@ -25,13 +24,6 @@ async function onLoad() {
     $('#CODE').append(room_info.code)
 
     console.log(room_info)
-    players = room_info.players
-    room_info.players.forEach(name => {
-        playerScores.append({
-            name: name,
-            score: 0
-        })
-    })
     socket.emit('host-room', room_info);
 
     roomID = room_info._id
@@ -44,6 +36,12 @@ socket.on('user-join', (name, socketID) => {
     $('.players').append(`
         <li class="player ${name}" name="${name}" socketid="${socketID}"> <button class="kick" type="button">${name}</button></li>
     `)
+    
+    players.push({
+        name: name,
+        score: 0,
+        socketID: socketID,
+    })
 
     const playerCounter = $('#player-counter')
     let count = parseInt(playerCounter.attr('value')) + 1
@@ -52,31 +50,37 @@ socket.on('user-join', (name, socketID) => {
 })
 
 socket.on('player-disconnected', name => {
-    $(`.${name}`).remove()
     console.log(name, 'user has left!')
+    disconnectUser(name)
 })
 
 
-//remove player from game
+//remove player from game and emites an io event
 $(document).on('click', '.kick', (event) => {
     const playerName = event.target.innerHTML
     const socketID = $(`.${playerName}`).attr('socketid')
-
-    $(`.${playerName}`).remove();
-    //fire off some event that removes a player from the game 
+    socket.emit('remove-player', socketID, roomID)
 
     console.log(socketID, roomID, playerName)
-    socket.emit('remove-player', socketID, roomID)
+    disconnectUser(playerName)
+})
+
+//updates the html 
+function disconnectUser(playerName){
+
+    $(`.${playerName}`).remove();
 
     const playerCounter = $('#player-counter')
     let count = parseInt(playerCounter.attr('value')) - 1
     playerCounter.html(`Players: ${count}`)
     playerCounter.attr('value', count)
 
+}
 
-})
-
+//starts the game
 $('#start').on('click', () => {
+    // if()
+
     $('.lobby').css({ "display": "none" })
 
     //displays the game info
@@ -90,22 +94,23 @@ $('#start').on('click', () => {
     updateGameInfo()
 
     console.log(GAME_DATA)
+    //sends player game info
     socket.emit('start-game', roomCode, GAME_DATA.question_count)
 })
 
 
 $('.skip-question').on('click', () => {
-    //after the countdown is done it should call the callback
-    // countDown(8,() => {
-    //     const questionInfo = null
-    //     socket.emit('send out question details',questionInfo)    
-    // })
-
     displayResults()
 })
+
+
 $(document).on('click', '.continue', () => {
-    $('.results').css({ 'display': 'none' })
-    updateGameInfo()
+    if(currentQuestion >= GAME_DATA.question_count){
+        //do something that changes to the ending game screen
+    }else{
+        $('.results').css({ 'display': 'none' })
+        updateGameInfo()
+    }
 })
 
 
@@ -132,8 +137,12 @@ function updateGameInfo() {
             timer--;
             const intervalID = setInterval(() => {
                 if (timer <= 0 || allResponses >= players.length) {
-                    clearInterval(intervalID)
+                    currentQuestion++;
                     showGraph()
+                    //sends the players their scores
+                    socket.emit('send-player-scores',roomCode,players)
+
+                    clearInterval(intervalID)
                 }
                 $('.timer').html(`<p>${timer}</p>`)
                 $('.timer').attr('value', timer)
@@ -169,8 +178,11 @@ function updateGameInfo() {
         GamePin: ${roomCode}
     `)
 
-        currentQuestion++;
     });
+}
+
+function showEndingScreen(){
+    //show ending screen here
 }
 
 function displayResults() {
@@ -182,15 +194,20 @@ function displayResults() {
     const scoreboard = $('.scoreboard')
     scoreboard.html('')
 
-    // playerScores.sort((a,b)=> playerScores[])
-    for (player in playerScores) {
+    // updates scoreboard html for top 5 people
+    let count = 0;
+    players.forEach(obj=>{
+        if(count >= 4){
+            return;
+        }
+        count++;
         scoreboard.append(`
-        <div class="${player} scoreboard-player">
-        <p class="S1">${player}</p>
-        <p class="S2">${playerScores[player]}</p>
-        </div>
+            <div class="${obj.name} scoreboard-player">
+                <p class="S1 playerName">${obj.name}</p>
+                <p class="S2 playerScore">${obj.score}</p>
+            </div>
         `)
-    }
+    })
 
     //continue button which goes onto the next question
     scoreboard.append(`
@@ -209,9 +226,10 @@ function showGraph() {
 function countDown(count, cb) {
     $('.game-body').css({ "display": "none" })
     $('.counter-display').css({ 'display': "flex" })
+    const question = GAME_DATA.questions[currentQuestion]
     $('.counter-display').html(`
         <div>
-            <p class="T2">${GAME_DATA.questions[currentQuestion].question}</p> 
+            <p class="T2">${question.question}</p> 
             <p class="T1">${count}</p> 
         </div>
     `)
@@ -222,12 +240,14 @@ function countDown(count, cb) {
             console.log('test')
             $('.game-body').css({ "display": "flex" })
             $('.counter-display').css({ 'display': "none" })
+            socket.emit('allow-answers',roomID,question)
             cb()
+            
             clearInterval(timerID)
         }
         $('.counter-display').html(`
             <div>
-                <p class="T2">${GAME_DATA.questions[currentQuestion].question}</p> 
+                <p class="T2">${question.question}</p> 
                 <p class="T1">${count}</p> 
             </div>
         `)
@@ -239,30 +259,31 @@ function countDown(count, cb) {
 }
 
 let allResponses = 0;
+//needs to check all responses to display the little graph thing
 socket.on('receive-answer', (answer, playerName) => {
     const time = $('.timer').attr('value')
     const question = GAME_DATA.questions[currentQuestion]
 
     //safety measure to check if the timer is 0 and the users answer is correct
-    const found = playerScores.filter(obj => obj.name === playerName)
+    const found = players.filter(obj => obj.name === playerName)
     if (time > 0 && question.correct_answer == answer) {
         //use the timer as a multiplier
         const bonus = timer / 100;
 
         //redudent code haha brrrrrr
         if (found) {
-            playerScores.score += 100 + bonus;
+            players.score += 100 + bonus;
         } else {
-            playerScores.append({
+            players.push({
                 name: playerName,
                 score: 100 + bonus
             })
         }
     } else {
         if (found) {
-            playerScores.score += 100 + bonus;
+            players.score += 100 + bonus;
         } else {
-            playerScores.append({
+            players.push({
                 name: playerName,
                 score: 0
             })
