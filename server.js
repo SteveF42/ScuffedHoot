@@ -147,21 +147,22 @@ io.on('connection', socket => {
     })
     //sends event to host when a player submittes an answer
     socket.on('send-answer', async(code,answer) => {
-        const room = await Rooms.findOne({'socket_id':socket.id})
-        const player = room.players.filter(obj=> obj.socket_id === socket.id)
+        const room = await Rooms.findOne({'code':code})
+        const player = await room.players.filter(obj => obj.socket_id === socket.id)
         
         //sends the chosen answer from the player to the host 
-        socket.to(room.host_socket).emit('receive-answer',answer,player.name)
+        socket.to(room.host_socket).emit('receive-answer',answer,player[0].name)
     })
 
     //at the end of every question it'll send an event to the players telling them what their score was
     socket.on('send-player-scores',(room,players) => {
         players.forEach((obj) => {
-            socket.to(obj.socketID).emit('display-answer-screen',obj.score)
+            socket.to(obj.socketID).emit('show-results',obj.score)
         })
     })
     //allows players to select answers
     socket.on('allow-answers',(code,question)=>{
+        console.log(code)
         socket.broadcast.to(code).emit('display-questions',question)
     })
 })

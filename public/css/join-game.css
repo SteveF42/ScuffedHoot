@@ -99,7 +99,7 @@ body{
 .game-footer{
     display: flex;
     bottom:0px;
-    position: fixed;
+    /* position: fixed; */
     background-color: rgb(23, 25, 26);
     color: rgb(220, 219, 216);
     width: 100%;
@@ -169,6 +169,76 @@ body{
 .lower-message{
     font-size: 1.5rem;
 }
+
+.quiz-board{  
+    display: flex;
+    flex: 1 1 0%;
+    flex-flow: column wrap;
+    box-sizing: border-box;
+    width: 100%;
+}
+.question-wrapper{
+    height: 90%;
+    display: flex;
+    flex: 1 0 auto;
+    flex-flow: row wrap;
+
+}
+
+.question{
+    border-color: initial;
+    background-image: initial;
+    background-color: rgb(14, 79, 157);
+    color: rgb(220, 219, 216);
+    text-decoration-color: initial;
+
+
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: calc(50% - 16px);
+    max-width: 100%;
+    margin: 8px;
+    border: 0px;
+    border-radius: 3px;
+    box-shadow: rgb(0 0 0 / 10%) 0px -3px inset;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.1s linear 0s;
+    position: relative;
+    background-color: rgb(226, 27, 60);
+}
+
+.question-1{
+    border-color: initial;
+    box-shadow: rgb(0 0 0 / 10%) 0px -3px inset;
+    -webkit-tap-highlight-color: transparent;
+    background-color: rgb(172, 21, 46);
+}
+.question-2{
+    border-color: initial;
+    box-shadow: rgb(0 0 0 / 10%) 0px -3px inset;
+    -webkit-tap-highlight-color: transparent;
+    background-color: rgb(14, 79, 157);
+}
+.question-3{
+    border-color: initial;
+    box-shadow: rgb(0 0 0 / 10%) 0px -3px inset;
+    -webkit-tap-highlight-color: transparent;
+    background-color: rgb(164, 120, 0);
+}
+.question-4{
+    border-color: initial;
+    box-shadow: rgb(0 0 0 / 10%) 0px -3px inset;
+    -webkit-tap-highlight-color: transparent;
+    background-color: rgb(27, 96, 9);
+}
+
+
+
 
 @keyframes color-change{
     25% {

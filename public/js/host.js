@@ -4,6 +4,7 @@ const players = []
 let roomID;
 let roomCode;
 let currentQuestion = 0;
+let skipQuestion = false
 
 document.onload = onLoad();
 
@@ -65,6 +66,35 @@ $(document).on('click', '.kick', (event) => {
     disconnectUser(playerName)
 })
 
+//needs to check all responses to display the little graph thing
+socket.on('receive-answer', (answer, playerName) => {
+    
+    const submitted = $('.submitted')
+    let playersAnswered = submitted.attr('value')
+    playersAnswered++;
+    submitted.html(playersAnswered)
+    submitted.attr('value',playersAnswered)
+    
+    const time = parseInt($('.timer').attr('value'))
+    const question = GAME_DATA.questions[currentQuestion]
+    
+    //safety measure to check if the timer is 0 and the users answer is correct
+    const found = players.filter(obj => obj.name === playerName)
+    //use the timer as a bonus
+    const bonus = Math.floor(time)
+    if (time > 0 && question.correct_answer == answer) {
+        if (found.length > 0) {
+            const index = players.findIndex(element=>element.name===playerName)
+            players[index].score += 100 + bonus;
+        } else {
+            players.push({
+                name: playerName,
+                score: 100 + bonus
+            })
+        }
+    }
+})
+
 //updates the html 
 function disconnectUser(playerName){
 
@@ -99,8 +129,11 @@ $('#start').on('click', () => {
 })
 
 
-$('.skip-question').on('click', () => {
-    displayResults()
+$('.skip-question').on('click', (event) => {
+    skipQuestion = true;
+})
+$(document).on('click','.display-scoreboard',(event) => {
+    displayResults();
 })
 
 
@@ -117,31 +150,37 @@ $(document).on('click', '.continue', () => {
 function updateGameInfo() {
     $('.game-body').css({ "display": "flex" })
     $('body').css({ 'animation': 'none', 'background-color': '#1e2122' })
-
-    allResponses = 0;
+    const responses = $('.submitted')
+    responses.attr('value',0)
+    responses.html('0')
+    
     const question = GAME_DATA.questions[currentQuestion];
     countDown(8, () => {
         const questionInfo = null
         socket.emit('send out question details', questionInfo)
-
-
+        
+        
         const topHalf = $('.top-half')
         const bottomHalf = $('.bottom-half')
         const footer = $('.game-footer')
         bottomHalf.find('.question-choices').html('')
-
+        
         //sets the side timer for the current question
         
         const time = (timer) => {
             $('.timer').html(`<p>${timer}</p>`)
             timer--;
             const intervalID = setInterval(() => {
-                if (timer <= 0 || allResponses >= players.length) {
-                    currentQuestion++;
-                    showGraph()
+                const allResponses = responses.attr('value')
+                if (timer <= 0 || allResponses >= players.length || skipQuestion) {
+                    //not the best way to do this but can't think of anything else atm
+                    $('.skip-question').replaceWith('<button class="display-scoreboard cstm-btn">Next</button')
+                    
                     //sends the players their scores
+                    //displays all of responses in a graph
+                    showGraph()
+                    showCorrect()
                     socket.emit('send-player-scores',roomCode,players)
-
                     clearInterval(intervalID)
                 }
                 $('.timer').html(`<p>${timer}</p>`)
@@ -181,13 +220,16 @@ function updateGameInfo() {
     });
 }
 
+function onTimesUp(){
+
+}
+
 function showEndingScreen(){
     //show ending screen here
 }
 
 function displayResults() {
     //will clear peoples games 
-    socket.emit('times-up')
     $('.game-body').css({ "display": "none" })
     $('.results').css({ 'display': 'block' })
     $('body').css({ 'background-color': 'purple' })
@@ -217,9 +259,25 @@ function displayResults() {
     `)
 }
 
+
+function showCorrect(){
+    const question = GAME_DATA.questions[currentQuestion]
+    currentQuestion++;
+
+    let ctr = 1;
+    for(key in question.answers){
+        if(key !== question.correct_answer){
+            $(`.question-${ctr}`).css({'opacity':'40%','animation':'0.5s ease 0s fade-out'})
+        }
+        ctr++;
+    }
+}
+
 function showGraph() {
     const graph = $('.show-graph')
     //make the little graph thing that shows which people chose which answer
+
+    graph.html('haha brr graph thingy goes here')
 }
 
 //how much time to count down 
@@ -240,9 +298,9 @@ function countDown(count, cb) {
             console.log('test')
             $('.game-body').css({ "display": "flex" })
             $('.counter-display').css({ 'display': "none" })
-            socket.emit('allow-answers',roomID,question)
+            socket.emit('allow-answers',roomCode,question)
             cb()
-            
+
             clearInterval(timerID)
         }
         $('.counter-display').html(`
@@ -258,37 +316,3 @@ function countDown(count, cb) {
 
 }
 
-let allResponses = 0;
-//needs to check all responses to display the little graph thing
-socket.on('receive-answer', (answer, playerName) => {
-    const time = $('.timer').attr('value')
-    const question = GAME_DATA.questions[currentQuestion]
-
-    //safety measure to check if the timer is 0 and the users answer is correct
-    const found = players.filter(obj => obj.name === playerName)
-    if (time > 0 && question.correct_answer == answer) {
-        //use the timer as a multiplier
-        const bonus = timer / 100;
-
-        //redudent code haha brrrrrr
-        if (found) {
-            players.score += 100 + bonus;
-        } else {
-            players.push({
-                name: playerName,
-                score: 100 + bonus
-            })
-        }
-    } else {
-        if (found) {
-            players.score += 100 + bonus;
-        } else {
-            players.push({
-                name: playerName,
-                score: 0
-            })
-        }
-    }
-
-    allResponses++;
-})

@@ -438,3 +438,21 @@ animation-name: essOoI; */
         transform: scale(1);
     }
 }
+
+@keyframes fade-out{
+    0%{
+        opacity: 100%;
+    }
+    25%{
+        opacity: 80%;
+    }
+    50%{
+        opacity: 60%;
+    }
+    75%{
+        opacity: 50%;
+    }
+    100%{
+        opacity: 40%;
+    }
+}
