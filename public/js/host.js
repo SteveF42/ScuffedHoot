@@ -1,6 +1,12 @@
 const socket = io('http://localhost:3000')
 const api_link = "http://localhost:3000"
 const players = []
+let playerChoiceHistory = {
+    Q1:0,
+    Q2:0,
+    Q3:0,
+    Q4:0
+}
 let roomID;
 let roomCode;
 let currentQuestion = 0;
@@ -68,7 +74,13 @@ $(document).on('click', '.kick', (event) => {
 
 //needs to check all responses to display the little graph thing
 socket.on('receive-answer', (answer, playerName) => {
-    
+    if(answer in playerChoiceHistory){
+        playerChoiceHistory[answer]+= 1
+    }else{
+        playerChoiceHistory[answer] = 1
+    }
+
+
     const submitted = $('.submitted')
     let playersAnswered = submitted.attr('value')
     playersAnswered++;
@@ -153,6 +165,9 @@ function updateGameInfo() {
     const responses = $('.submitted')
     responses.attr('value',0)
     responses.html('0')
+    for(key in playerChoiceHistory){
+        playerChoiceHistory[key]=0
+    }
     
     const question = GAME_DATA.questions[currentQuestion];
     countDown(8, () => {
@@ -238,6 +253,7 @@ function displayResults() {
 
     // updates scoreboard html for top 5 people
     let count = 0;
+    players.sort((a,b)=>b.score-a.score)
     players.forEach(obj=>{
         if(count >= 4){
             return;
@@ -276,8 +292,30 @@ function showCorrect(){
 function showGraph() {
     const graph = $('.show-graph')
     //make the little graph thing that shows which people chose which answer
+    const ratio = (0.75/players.length)*100
+    console.log(ratio)
+    graph.html(`
+        <div class="graph">
+        </div>
+    `)
 
-    graph.html('haha brr graph thingy goes here')
+    for(key in playerChoiceHistory){
+        graph.find('.graph').append(`
+            <div class="bar">
+                <div class="top-bar">
+                    <span class="number-${key} text-style" style="font-size:40">${playerChoiceHistory[key]}</span>
+                    <div class="inner-top-bar ${key}" style="height:${playerChoiceHistory[key]> 0 ? ratio * playerChoiceHistory[key] : 6}%">
+                    
+                    </div>
+                </div>
+                <div class="bottom-bar ${key}">
+                    <span class="logo">
+
+                    </span>
+                </div>
+            </div>
+        `)
+    }
 }
 
 //how much time to count down 

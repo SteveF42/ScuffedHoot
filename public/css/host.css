@@ -198,7 +198,8 @@ body{
 .ask-question{
     width: 60%;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
+    height: 100%
 }
 
 .right-side{
@@ -409,6 +410,87 @@ height: 40%;
 .scoreboard-player p{
     margin: 0;
     width: 50%
+}
+
+.graph{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    width: 100%;
+    height: calc(100% - 4.625rem);
+    max-width: 38.438rem;
+}
+.bar{
+    display: flex;
+    flex: 0 0 21.875%;
+    flex-direction: column;
+    height: 100%;
+}
+.top-bar{
+    margin: 0px 0px 0.24rem;
+    height: calc(100% - 0.24rem);
+    padding-top: 1.5rem;
+
+    display: flex;
+    flex: 0 1 calc(100% - 1.25rem);
+    flex-direction: column;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    min-height: 1.25rem;
+}
+.inner-top-bar{
+    box-shadow: none;
+    background-color: rgb(14, 79, 157);
+
+    flex: 0 0 auto;
+    border-radius: 0px 0px 0.125rem 0.125rem;
+    box-shadow: none;
+    height: 6%;
+}
+.bottom-bar{
+    color: rgb(220, 219, 216);
+    fill: rgb(220, 219, 216);
+    background-color: rgb(14, 79, 157);
+
+    display: flex;
+    flex: 1 0 auto;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 4px;
+    min-height: 2.25rem;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+.Q1{
+    box-shadow: none;
+    background-color: rgb(172, 21, 46);
+}
+.Q2{
+    box-shadow: none;
+    background-color: rgb(14, 79, 157);
+}
+.Q3{
+    box-shadow: none;
+    background-color: rgb(164, 120, 0);
+}
+.Q4{
+    box-shadow: none;
+    background-color: rgb(28, 105, 10);
+}
+.number-Q1{
+    color: rgb(219, 48, 77);
+}
+.number-Q2{
+    color: rgb(81, 159, 227);
+}
+.number-Q3{
+    color: rgb(242, 191, 50);
+}
+.number-Q4{
+    color: rgb(132, 230, 106);
 }
 /* animation: 1s ease 0s 1 normal none running essOoI;
 animation-duration: 1s;
