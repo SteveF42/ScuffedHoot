@@ -165,6 +165,10 @@ io.on('connection', socket => {
         console.log(code)
         socket.broadcast.to(code).emit('display-questions',question)
     })
+
+    socket.on('return-to-lobby',(code) => {
+        socket.broadcast.to(code).emit('reset-game')
+    })
 })
 
 

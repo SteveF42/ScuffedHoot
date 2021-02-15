@@ -22,12 +22,12 @@ $('.submit-button').on(' click',async () => {
 
     const response = await fetch(api_link + `/api/play/${gamePIN}`);
     const json = await response.json();
+    
+    console.log(roomInfo)
     roomInfo = {
         ...json
     }
-
-    console.log(roomInfo)
-
+    
     if (response.status === 200) {
         for(let i = 0; i < roomInfo.players.length; i++){
             const otherName = roomInfo.players[i].name;
@@ -39,10 +39,10 @@ $('.submit-button').on(' click',async () => {
         socket.emit('join-game', { name: name, code: gamePIN });
         $('.container').css({'display':'none'});
         // insert something that says waiting for host
-
-        $('.name-container').append(name)
+        
+        $('.name-container').html(name)
         $('.game-controller').css({'display': 'flex'})
-
+        
 
     } else {
         displayError('Invalid Code')
@@ -52,7 +52,7 @@ $('.submit-button').on(' click',async () => {
 
 
 socket.on('kicked', (hostDisconnect,roomCode) => {
-    $('.name').html('');
+    $('.name-container').html('');
     $('.game-controller').css({'display': 'none'});
     $('.container').css({'display' :'flex'})
 
@@ -104,6 +104,17 @@ socket.on('display-questions',questionInfo=>{
 
     updateQuestionCounter();
     displayChoices(questionInfo);
+})
+
+socket.on('reset-game',() => {
+    $('.game-body').html(`
+    <h2 class="text-style upper-message">Game Over!</h2>
+    <p class="text-style lower-message">Your still in the game!</p>
+    `)
+    $('.game-body').css({'background-color':'rgb(102, 191, 57);'})
+    const scoreBox = $('.player-points')
+    scoreBox.attr('value',0)
+    scoreBox.html(`Score: 0`)
 })
 
 

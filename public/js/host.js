@@ -61,6 +61,17 @@ socket.on('player-disconnected', name => {
     disconnectUser(name)
 })
 
+//resets the game and returns the user back to the home screen
+$(document).on('click','.return-to-home',(params) => {
+    $('.game-controller').css({'display':'none'})
+    $('.lobby').css({'display':'block'})
+    $('body').css({'animation':'14s ease-in-out 0s infinite alternate none running color-change','background-color':'rgb(69, 163, 229)'})
+    $('.endgame').css({'display':'none'})
+    for(i of players){
+        i.score = 0;
+    }
+    socket.emit('return-to-lobby',roomCode)
+})
 
 //remove player from game and emites an io event
 $(document).on('click', '.kick', (event) => {
@@ -69,6 +80,10 @@ $(document).on('click', '.kick', (event) => {
     socket.emit('remove-player', socketID, roomID)
 
     console.log(socketID, roomID, playerName)
+    
+    const index = players.indexOf(obj=>obj.name === playerName);
+    players.splice(index,1);
+    console.log(players)
     disconnectUser(playerName)
 })
 
@@ -152,6 +167,10 @@ $(document).on('click','.display-scoreboard',(event) => {
 $(document).on('click', '.continue', () => {
     if(currentQuestion >= GAME_DATA.question_count){
         //do something that changes to the ending game screen
+        $('.results').css({ 'display': 'none' })
+        currentQuestion=0;
+        console.log(currentQuestion)
+        showEndingScreen()
     }else{
         $('.results').css({ 'display': 'none' })
         updateGameInfo()
@@ -241,6 +260,40 @@ function onTimesUp(){
 
 function showEndingScreen(){
     //show ending screen here
+    $('.game-body').css({'display':'none'})
+    $('.endgame').css({'display':'block'})
+    
+    const endgame = $('.endgame')
+    players.sort((a,b)=>b.score - a.score)
+
+    let ctr = 0;
+    const winners = [];
+    for(i of players){
+        //select the top three for awarads
+        if(ctr > 2) break;
+        winners.push(i);
+        ctr++;
+    }
+    endgame.html(`
+        <div style="width: 100%; display:flex; justify-content:flex-end; padding: 25px 25px 0 0;">
+            <button class="return-to-home cstm-btn">continue</button>
+        </div>
+
+        <div class="winners-podium text-style">
+            <div class="third-place" style="display: ${winners.length > 2 ? "show" : "none"}">
+                <p>${winners.length > 2 ? winners[2].name : ''}</p>
+                <span class="podium">3rd place</span>
+            </div>
+            <div class="first-place">
+                <p>${winners[0].name}</p>
+                <span class="podium">1st place</span>
+            </div>
+            <div class="second-place" style="display: ${winners.length > 1 ? "show" : "none"}">
+                <p>${winners.length > 1 ? winners[1].name : ''}</p>
+                <span class="podium">2nd place</span>
+            </div>
+        </div>
+    `)
 }
 
 function displayResults() {
@@ -260,7 +313,7 @@ function displayResults() {
         }
         count++;
         scoreboard.append(`
-            <div class="${obj.name} scoreboard-player">
+            <div class="scoreboard-player">
                 <p class="S1 playerName">${obj.name}</p>
                 <p class="S2 playerScore">${obj.score}</p>
             </div>
