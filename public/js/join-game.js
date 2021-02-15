@@ -111,7 +111,7 @@ socket.on('reset-game',() => {
     <h2 class="text-style upper-message">Game Over!</h2>
     <p class="text-style lower-message">Your still in the game!</p>
     `)
-    $('.game-body').css({'background-color':'rgb(102, 191, 57);'})
+    $('.game-body').css({'background-color':'rgb(102, 191, 57)'})
     const scoreBox = $('.player-points')
     scoreBox.attr('value',0)
     scoreBox.html(`Score: 0`)

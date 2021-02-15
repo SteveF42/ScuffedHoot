@@ -81,8 +81,7 @@ $(document).on('click', '.kick', (event) => {
 
     console.log(socketID, roomID, playerName)
     
-    const index = players.indexOf(obj=>obj.name === playerName);
-    players.splice(index,1);
+
     console.log(players)
     disconnectUser(playerName)
 })
@@ -124,9 +123,10 @@ socket.on('receive-answer', (answer, playerName) => {
 
 //updates the html 
 function disconnectUser(playerName){
+    const index = players.indexOf(obj=>obj.name === playerName);
+    players.splice(index,1);
 
     $(`.${playerName}`).remove();
-
     const playerCounter = $('#player-counter')
     let count = parseInt(playerCounter.attr('value')) - 1
     playerCounter.html(`Players: ${count}`)
@@ -177,7 +177,7 @@ $(document).on('click', '.continue', () => {
     }
 })
 
-
+//main game function that displays the quetsions and the other thingies 
 function updateGameInfo() {
     $('.game-body').css({ "display": "flex" })
     $('body').css({ 'animation': 'none', 'background-color': '#1e2122' })
@@ -203,6 +203,7 @@ function updateGameInfo() {
         
         const time = (timer) => {
             $('.timer').html(`<p>${timer}</p>`)
+            $('.timer').attr('value', timer)
             timer--;
             const intervalID = setInterval(() => {
                 const allResponses = responses.attr('value')
@@ -224,7 +225,7 @@ function updateGameInfo() {
         }
         time(60)
 
-        topHalf.find('.ask-question').html(`<p>${question.question}</p>`)
+        topHalf.find('.ask-question').html(`<div style="display:flex; align-items:center;"><p>${question.question}</p></div>`)
         //responses will be handled by socket.io
 
         //displays the current questions on screen 
